@@ -1,0 +1,113 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class TileMapManager : MonoBehaviour {
+
+    public TextAsset tileMap;
+    public Transform obstacle;
+
+    protected int[,] tiles;
+    protected Vector3 tileSize;
+    protected Vector3 planeSize;
+
+    //returns 0 for accessible tiles, 1 for blocked tiles and out-of-range coordinates 
+    public int TileValue(int s, int t)
+        => (0 > s || tiles.GetLength(1) <= s || 0 > t || tiles.GetLength(0) <= t) 
+        ? 1 : tiles[t, s];
+
+    //returns the position of the center of the tile belonging to the passed coordinates  (s: vertical, t: horizontal)
+    public Vector3 TileCenter(int s, int t) => new Vector3(
+            (s + .5f) * tileSize.x,
+            0f,
+            (t + .5f) * tileSize.z
+            ) - .5f * planeSize + transform.position;
+
+    //reads the provided tile map, parses it char by char and returns a 2D array of its lines and columns
+    public int[,] ReadTileMap(TextAsset text)
+    {
+        var option = StringSplitOptions.RemoveEmptyEntries;
+        var lines = tileMap.text.Split(Environment.NewLine.ToCharArray(), option);
+        var lineCount = lines.Length;
+        var columnCount = lines[0].ToCharArray().Length;
+        var tiles = new int[lineCount, columnCount];
+
+        Debug.Log(lineCount);
+        Debug.Log(columnCount);
+
+        for (var lineIndex = 0; lineIndex < lineCount; ++lineIndex)
+        {
+            var line = lines[lineIndex].ToCharArray();
+
+            for (var columnIndex = 0; columnIndex < columnCount; ++columnIndex)
+            {
+                tiles[lineIndex, columnIndex] = (int) Char.GetNumericValue(line[columnIndex]);
+            }
+        }
+
+        return tiles;
+    }
+
+    //sets up class members, scales them depending on obstacle and plane, and places obstacles
+    void Awake()
+    {
+        tiles = ReadTileMap(tileMap);
+
+        var obstacleMesh = obstacle.GetComponent<MeshFilter>().sharedMesh;
+        tileSize = obstacleMesh.bounds.size;
+
+        planeSize = new Vector3(
+            tileSize.x * tiles.GetLength(1),
+            0f,
+            tileSize.z * tiles.GetLength(0)
+        );
+
+        transform.localScale = new Vector3(
+            planeSize.x / 10f, 
+            1f, 
+            planeSize.z / 10f
+        );
+
+        var scaleY = obstacle.transform.localScale.y;
+
+        for (var t = 0; t < tiles.GetLength(0); ++t) {
+            for (var s = 0; s < tiles.GetLength(1); ++s)
+            {
+                if (0 == TileValue(s, t)) { continue; } //tile is accessible
+
+                var newObstacle = (Transform)Instantiate(obstacle, TileCenter(s, t) + .5f * scaleY * tileSize.y * transform.up, Quaternion.identity);
+                newObstacle.parent = transform;
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        DebugDrawGrid(transform.position - .5f * planeSize, planeSize, tileSize, Color.blue);
+    }
+
+    public void DebugDrawGrid(Vector3 origin, Vector3 planeSize, Vector3 tileSize, Color color)
+    {
+        var width = planeSize.x;
+        var height = planeSize.z;
+
+        var numRows = (int) (planeSize.z / tileSize.z);
+        var numCols = (int) (planeSize.x / tileSize.x);
+        origin.y += .1f;
+
+        for (var index = 0; index <= numRows; ++index)
+        {
+            var start = origin + index * tileSize.x * Vector3.forward;
+            var end = start + width * Vector3.right;
+            Debug.DrawLine(start, end, color);
+        }
+
+        for (var index = 0; index <= numCols; ++index)
+        {
+            var start = origin + index * tileSize.z * Vector3.right;
+            var end = start + height * Vector3.forward;
+            Debug.DrawLine(start, end, color);
+        }
+    }
+}
