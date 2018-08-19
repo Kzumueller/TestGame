@@ -17,12 +17,24 @@ public class TileMapManager : MonoBehaviour {
         => (0 > s || tiles.GetLength(1) <= s || 0 > t || tiles.GetLength(0) <= t) 
         ? 1 : tiles[t, s];
 
+    //returns 0 for accessible tiles, 1 for blocked tiles
+    public int TileValue(Tile tile) => TileValue(tile.s, tile.t);
+
     //returns the position of the center of the tile belonging to the passed coordinates  (s: vertical, t: horizontal)
     public Vector3 TileCenter(int s, int t) => new Vector3(
             (s + .5f) * tileSize.x,
             0f,
             (t + .5f) * tileSize.z
             ) - .5f * planeSize + transform.position;
+
+    //returns the position of the center of the passed Tile
+    public Vector3 TileCenter(Tile tile) => TileCenter(tile.s, tile.t);
+
+    //turns a position on the grid into a Tile
+    public Tile VectorToTile(Vector3 position) => new Tile(
+            (int)Mathf.Floor((position.x - transform.position.x + .5f * planeSize.x) / tileSize.x),
+            (int)Mathf.Floor((position.z - transform.position.z + .5f * planeSize.z) / tileSize.z)
+            );
 
     //reads the provided tile map, parses it char by char and returns a 2D array of its lines and columns
     public int[,] ReadTileMap(TextAsset text)
@@ -52,6 +64,11 @@ public class TileMapManager : MonoBehaviour {
     //sets up class members, scales them depending on obstacle and plane, and places obstacles
     void Awake()
     {
+        if(null != tileMap) DrawTileMap();
+    }
+
+    public void DrawTileMap()
+    {
         tiles = ReadTileMap(tileMap);
 
         var obstacleMesh = obstacle.GetComponent<MeshFilter>().sharedMesh;
@@ -64,29 +81,32 @@ public class TileMapManager : MonoBehaviour {
         );
 
         transform.localScale = new Vector3(
-            planeSize.x / 10f, 
-            1f, 
+            planeSize.x / 10f,
+            1f,
             planeSize.z / 10f
         );
 
         var scaleY = obstacle.transform.localScale.y;
 
-        for (var t = 0; t < tiles.GetLength(0); ++t) {
+        for (var t = 0; t < tiles.GetLength(0); ++t)
+        {
             for (var s = 0; s < tiles.GetLength(1); ++s)
             {
                 if (0 == TileValue(s, t)) { continue; } //tile is accessible
 
-                var newObstacle = (Transform)Instantiate(obstacle, TileCenter(s, t) + .5f * scaleY * tileSize.y * transform.up, Quaternion.identity);
+                var newObstacle = Instantiate(obstacle, TileCenter(s, t) + .5f * scaleY * tileSize.y * transform.up, Quaternion.identity);
                 newObstacle.parent = transform;
             }
         }
     }
 
+    //calls DebugDrawGrid
     private void OnDrawGizmos()
     {
         DebugDrawGrid(transform.position - .5f * planeSize, planeSize, tileSize, Color.blue);
     }
 
+    //draws a funny grid on the plane, visualizing the tile map
     public void DebugDrawGrid(Vector3 origin, Vector3 planeSize, Vector3 tileSize, Color color)
     {
         var width = planeSize.x;
