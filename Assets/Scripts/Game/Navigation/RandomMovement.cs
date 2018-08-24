@@ -5,7 +5,7 @@ using UnityEngine;
 public class RandomMovement : MonoBehaviour {
 
     //movement speed
-    public float speed = 4f;
+    public float speed = 10f;
 
     private CharacterController controller;
 

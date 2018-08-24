@@ -97,6 +97,13 @@ public class TileMapManager : MonoBehaviour {
         }
     }
 
+    // renders a "Quit" button
+    private void OnGUI() {
+        if (GUI.Button(new Rect(10, 10, 60, 30), "Quit")) {
+            Application.Quit();
+        }
+    }
+
     //calls DebugDrawGrid
     private void OnDrawGizmos()
     {
