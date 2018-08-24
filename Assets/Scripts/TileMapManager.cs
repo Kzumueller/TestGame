@@ -8,17 +8,17 @@ public class TileMapManager : MonoBehaviour {
     public TextAsset tileMap;
     public Transform obstacle;
 
-    protected int[,] tiles;
+    protected TileType[,] tiles;
     protected Vector3 tileSize;
     protected Vector3 planeSize;
 
     //returns 0 for accessible tiles, 1 for blocked tiles and out-of-range coordinates 
-    public int TileValue(int s, int t)
+    public TileType TileValue(int s, int t)
         => (0 > s || tiles.GetLength(1) <= s || 0 > t || tiles.GetLength(0) <= t) 
-        ? 1 : tiles[t, s];
+        ? TileType.Blocked : tiles[t, s];
 
     //returns 0 for accessible tiles, 1 for blocked tiles
-    public int TileValue(Tile tile) => TileValue(tile.s, tile.t);
+    public TileType TileValue(Tile tile) => TileValue(tile.s, tile.t);
 
     //returns the position of the center of the tile belonging to the passed coordinates  (s: vertical, t: horizontal)
     public Vector3 TileCenter(int s, int t) => new Vector3(
@@ -37,13 +37,13 @@ public class TileMapManager : MonoBehaviour {
             );
 
     //reads the provided tile map, parses it char by char and returns a 2D array of its lines and columns
-    public int[,] ReadTileMap(TextAsset text)
+    public TileType[,] ReadTileMap(TextAsset text)
     {
         var option = StringSplitOptions.RemoveEmptyEntries;
         var lines = tileMap.text.Split(Environment.NewLine.ToCharArray(), option);
         var lineCount = lines.Length;
         var columnCount = lines[0].ToCharArray().Length;
-        var tiles = new int[lineCount, columnCount];
+        var tiles = new TileType[lineCount, columnCount];
 
         Debug.Log(lineCount);
         Debug.Log(columnCount);
@@ -54,7 +54,7 @@ public class TileMapManager : MonoBehaviour {
 
             for (var columnIndex = 0; columnIndex < columnCount; ++columnIndex)
             {
-                tiles[lineIndex, columnIndex] = (int) Char.GetNumericValue(line[columnIndex]);
+                tiles[lineIndex, columnIndex] = (TileType) Char.GetNumericValue(line[columnIndex]);
             }
         }
 
@@ -71,8 +71,7 @@ public class TileMapManager : MonoBehaviour {
     {
         tiles = ReadTileMap(tileMap);
 
-        var obstacleMesh = obstacle.GetComponent<MeshFilter>().sharedMesh;
-        tileSize = obstacleMesh.bounds.size;
+        tileSize = obstacle.transform.localScale;
 
         planeSize = new Vector3(
             tileSize.x * tiles.GetLength(1),
@@ -86,15 +85,13 @@ public class TileMapManager : MonoBehaviour {
             planeSize.z / 10f
         );
 
-        var scaleY = obstacle.transform.localScale.y;
-
         for (var t = 0; t < tiles.GetLength(0); ++t)
         {
             for (var s = 0; s < tiles.GetLength(1); ++s)
             {
-                if (0 == TileValue(s, t)) { continue; } //tile is accessible
+                if (TileType.Accessible == TileValue(s, t)) { continue; }
 
-                var newObstacle = Instantiate(obstacle, TileCenter(s, t) + .5f * scaleY * tileSize.y * transform.up, Quaternion.identity);
+                var newObstacle = Instantiate(obstacle, TileCenter(s, t) + .5f * tileSize.y * transform.up, Quaternion.identity);
                 newObstacle.parent = transform;
             }
         }

@@ -9,8 +9,6 @@ public class KeyBoardControlWithCharacterController : KeyBoardControl {
 	// Use this for initialization
 	void Start () {
         controller = GetComponent<CharacterController>();
-        var test = GetComponent("CharacterMotor");
-        var breakPoint = true;
     }
 	
 	// Update is called once per frame

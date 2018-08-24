@@ -20,7 +20,7 @@ public class TileMapEditor : TileMapManager {
             tileSize = obstacle.GetComponent<MeshFilter>().mesh.bounds.size;
             planeSize = new Vector3(tileSize.x * width, 0f, tileSize.z * height);
             transform.localScale = new Vector3(planeSize.x / 10f, 1f, planeSize.z / 10f);
-            tiles = new int[width, height];
+            tiles = new TileType[width, height];
         }
         else
         {
@@ -56,14 +56,14 @@ public class TileMapEditor : TileMapManager {
     void OnMouseDown()
     {
         //the camera must have orthographic projection for this to work, otherwise it needs a depth parameter which is not included in Input.mousePosition
-        var position = Camera.main.ScreenToWorldPoint(Input.mousePosition);  
+        var position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.y));  
         var tile = VectorToTile(position);
-        if (1 == TileValue(tile)) { return; }
+        if (TileType.Blocked == TileValue(tile)) { return; }
 
         var obstacleClone = Instantiate(obstacle, TileCenter(tile) + .5f * tileSize.y * Vector3.up, Quaternion.identity);
         obstacleClone.parent = transform;
         obstacleClone.tag = "Obstacle";
-        tiles[tile.t, tile.s] = 1;
+        tiles[tile.t, tile.s] = TileType.Blocked;
     }
 
     //draws "Clear" and "Save As" buttons

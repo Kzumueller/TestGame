@@ -14,6 +14,6 @@ public class KeyBoardControlWithMotor : KeyBoardControl {
 	// Update is called once per frame
 	void Update () {
         motor.inputMoveDirection = GetDirection();
-        motor.inputJump = Input.GetKey(KeyCode.Space);
+        motor.inputJump = GetJump();
 	}
 }

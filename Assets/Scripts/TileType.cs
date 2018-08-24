@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+public enum TileType
+{
+    Accessible = 0,
+    Blocked = 1,
+    Start = 2,
+    Goal = 3
+}
