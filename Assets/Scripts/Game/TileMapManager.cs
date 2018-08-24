@@ -65,6 +65,7 @@ public class TileMapManager : MonoBehaviour {
     void Awake()
     {
         if(null != tileMap) DrawTileMap();
+        Cursor.visible = false;
     }
 
     public void DrawTileMap()
@@ -99,9 +100,8 @@ public class TileMapManager : MonoBehaviour {
 
     // renders a "Quit" button
     private void OnGUI() {
-        if (GUI.Button(new Rect(10, 10, 60, 30), "Quit")) {
-            Application.Quit();
-        }
+        GUI.skin.GetStyle("Label").fontSize = 20;
+        GUI.Label(new Rect(10, 10, Screen.width / 2, 50), "Hit Esc to quit");
     }
 
     //calls DebugDrawGrid

@@ -2,56 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class ComputerPlayer : MonoBehaviour {
+public class ComputerPlayer : MonoBehaviour {
 
-    private State state = State.Waypoint;
-    private Waypoints waypoints;
-    private RandomMovement randomMovement;
-    private PathNavigation navigation;
-    private Timer timer;
-    private Vector3 lastPosition;
+    private Dictionary<string, State> states;
+    private State currentState;
 
-	// Use this for initialization
-	private void Start () {
-        waypoints = GetComponent<Waypoints>();
-        randomMovement = GetComponent<RandomMovement>();
-        navigation = GetComponent<PathNavigation>();
-        waypoints.GoToRandomWaypoint();
-	}
-	
-	//switches between states, (de)activates other scripts to act accordingly
-	private void Update () {
-        switch (state) {
-            case State.Waypoint:
-                if (!Stopped()) break;
+    //configures and adds States to the states Dictionary
+    private void Start() {
+        states = new Dictionary<string, State>();
 
-                state = State.Wander;
-                waypoints.enabled = false;
-                navigation.enabled = false;
-                randomMovement.enabled = true;
-                timer = new Timer(5f);
-                break;
+        State state = new WaypointState(transform);
+        state.AddTransition(new StoppedTransition("Wandering", transform));
+        states.Add(state.name, state);
 
-            case State.Wander:
-                if (!timer.Finished(Time.deltaTime)) break;
+        state = new WanderingState(transform);
+        state.AddTransition(new TimerTransition("Waypoint", 5f));
+        state.AddTransition(new PlayerCloseTransition("Chasing", transform, 10f));
+        states.Add(state.name, state);
 
-                state = State.Waypoint;
-                randomMovement.enabled = false;
-                navigation.enabled = true;
-                waypoints.enabled = true;
-                waypoints.GoToRandomWaypoint();
-                break;
+        state = new ChasingState(transform);
+        state.AddTransition(new PlayerFarTransition("Waypoint", transform, 10f));
+        states.Add(state.name, state);
+
+        currentState = states["Waypoint"];
+        currentState.Enter();
+    }
+
+    //checks whether a transition from the currentState is due and if it is, exits it, gets the next state and enters it 
+    private void Update() {
+        var nextStateName = currentState.Transition();
+
+        if (nextStateName != currentState.name) {
+            currentState.Exit();
+            currentState = states[nextStateName];
+            currentState.Enter();
         }
-	}
-
-    //returns whether out bot is standing still, i.e. its position in the last frame is the same as its current one
-    private bool Stopped() {
-        if (lastPosition == transform.position) {
-            return true;
-        }
-
-        lastPosition = transform.position;
-
-        return false;
     }
 }
