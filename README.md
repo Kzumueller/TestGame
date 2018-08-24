@@ -1,6 +1,7 @@
-#TestGame
+# TestGame
+A little game about solving mazes to teach me the basics of game development, done in the course of my B.Sc. 
 
-##Builds
+## Builds
 
 ### 2018-08-24
 
