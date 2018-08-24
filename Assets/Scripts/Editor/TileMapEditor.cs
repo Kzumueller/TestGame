@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using UnityEditor;
 
 public class TileMapEditor : TileMapManager {
 
@@ -36,7 +35,7 @@ public class TileMapEditor : TileMapManager {
     //saves the current state as a text file to be used in the game
     public void SaveTileMap()
     {
-        var fileName = EditorUtility.SaveFilePanelInProject("Save Tile Map", "NewTileMap", "txt", "...");
+        var fileName = UnityEditor.EditorUtility.SaveFilePanelInProject("Save Tile Map", "NewTileMap", "txt", "...");
         if (0 == fileName.Length) return;
         var stringBuilder = new StringBuilder();
 

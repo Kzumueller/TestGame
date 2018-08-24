@@ -58,6 +58,11 @@ public class Tile : IComparable
         return (s == tile.s) && (t == tile.t);
     }
 
+    // Happy now, VS?
+    public override int GetHashCode() {
+        return base.GetHashCode();
+    }
+
     public override string ToString()
     {
         return $"Tile {s},{t}, cost since start: {costSinceStart}, cost to goal: {costToGoal}";

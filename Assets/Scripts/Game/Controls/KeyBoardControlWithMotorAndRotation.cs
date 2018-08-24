@@ -7,12 +7,10 @@ public class KeyBoardControlWithMotorAndRotation : KeyBoardControl {
     public float rotationSpeed = 90f;
 
     private CharacterMotor motor;
-    private Transform camera;
 
 	// Use this for initialization
 	void Start () {
         motor = GetComponent<CharacterMotor>();
-        camera = Camera.main.transform;
 	}
 	
 	// Update is called once per frame
@@ -22,9 +20,4 @@ public class KeyBoardControlWithMotorAndRotation : KeyBoardControl {
         motor.inputMoveDirection = transform.rotation * GetDirection();
         motor.inputJump = GetJump();
 	}
-
-    private void LateUpdate()
-    {
-        //camera.Rotate(transform.forward * GetRotationX() * rotationSpeed * Time.deltaTime);
-    }
 }
