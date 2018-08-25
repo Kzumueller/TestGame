@@ -1,6 +1,13 @@
 # TestGame
 A little game about solving mazes to teach me the basics of game development, done in the course of my B.Sc. 
 
+## Used Assets
+
+- Space Robot Kyle by Kyle Brewer
+- Yughues Free Metal Materials - patterns 10 & 23
+
+Thanks a lot!
+
 ## Builds
 
 ### 2018-08-25
