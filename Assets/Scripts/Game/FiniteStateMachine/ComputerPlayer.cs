@@ -16,12 +16,18 @@ public class ComputerPlayer : MonoBehaviour {
         states.Add(state.name, state);
 
         state = new WanderingState(transform);
+        state.AddTransition(new PlayerCloseTransition("Chasing", transform, 5f));
         state.AddTransition(new TimerTransition("Waypoint", 5f));
-        state.AddTransition(new PlayerCloseTransition("Chasing", transform, 10f));
+        state.AddTransition(new RandomTransition("Idle", 3, 7));
         states.Add(state.name, state);
 
         state = new ChasingState(transform);
-        state.AddTransition(new PlayerFarTransition("Waypoint", transform, 10f));
+        state.AddTransition(new PlayerFarTransition("Waypoint", transform, 5f));
+        states.Add(state.name, state);
+
+        state = new IdleState();
+        state.AddTransition(new TimerTransition("Wandering", 5f));
+        state.AddTransition(new PlayerCloseTransition("Chasing", transform, 5f));
         states.Add(state.name, state);
 
         currentState = states["Waypoint"];

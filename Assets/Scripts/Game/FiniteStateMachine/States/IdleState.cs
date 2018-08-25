@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class IdleState : State {
 
-    public IdleState(string name) : base(name) { }
+    public IdleState() : base("Idle") { }
 
     // this class is called IdleState for a reason
-    public override void Enter() {
-        base.Enter();
-    }
+    public override void Enter() => base.Enter();
 
-    public override void Exit() {
-    }
+    public override void Exit() {}
 }
