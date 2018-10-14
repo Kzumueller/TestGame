@@ -43,7 +43,7 @@ public class TileMapEditor : TileMapManager {
         {
             for (var s = 0; s < width; ++s)
             {
-                stringBuilder.Append(tiles[t, s]);
+                stringBuilder.Append((int) tiles[t, s]);
             }
             stringBuilder.Append(Environment.NewLine);
         }

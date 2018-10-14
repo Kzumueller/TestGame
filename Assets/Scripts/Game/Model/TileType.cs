@@ -7,7 +7,5 @@ using System.Threading.Tasks;
 public enum TileType
 {
     Accessible = 0,
-    Blocked = 1,
-    Start = 2,
-    Goal = 3
+    Blocked = 1
 }

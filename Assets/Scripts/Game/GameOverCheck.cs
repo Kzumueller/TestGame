@@ -15,7 +15,6 @@ public class GameOverCheck : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (1f > Vector3.Distance(transform.position, player.position)) {
-            Debug.Log("Gotcha!");
             SceneManager.LoadScene("GameOver");
         }
 

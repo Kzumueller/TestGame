@@ -7,6 +7,9 @@ TagManager:
   - Obstacle
   - TileMapPlane
   - Enemy
+  - Item
+  - Light
+  - Goal
   layers:
   - Default
   - TransparentFX

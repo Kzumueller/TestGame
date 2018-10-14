@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 1086786569}
   - component: {fileID: 1086786568}
   - component: {fileID: 1086786572}
+  - component: {fileID: 1086786573}
   m_Layer: 0
   m_Name: EditorPlane
   m_TagString: Untagged
@@ -212,10 +213,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89655ab48aaa7f14981382216a81c131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileMap: {fileID: 4900000, guid: 65a5482d5d5f9a34aad50c4f12226f00, type: 3}
+  tileMap: {fileID: 0}
+  obstacle: {fileID: 0}
+  width: 10
+  height: 10
+--- !u!114 &1086786573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1086786567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89655ab48aaa7f14981382216a81c131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileMap: {fileID: 0}
   obstacle: {fileID: 1847433832}
-  width: 20
-  height: 20
+  width: 30
+  height: 30
 --- !u!1 &1103351881
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,6 +308,7 @@ GameObject:
   - component: {fileID: 1254028422}
   - component: {fileID: 1254028421}
   - component: {fileID: 1254028420}
+  - component: {fileID: 1254028423}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -359,6 +376,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &1254028423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1254028419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9ded22ff157dd645b0123276c04b01e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
 --- !u!1 &1847433828
 GameObject:
   m_ObjectHideFlags: 0

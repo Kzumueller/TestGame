@@ -45,9 +45,6 @@ public class TileMapManager : MonoBehaviour {
         var columnCount = lines[0].ToCharArray().Length;
         var tiles = new TileType[lineCount, columnCount];
 
-        Debug.Log(lineCount);
-        Debug.Log(columnCount);
-
         for (var lineIndex = 0; lineIndex < lineCount; ++lineIndex)
         {
             var line = lines[lineIndex].ToCharArray();

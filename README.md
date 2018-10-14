@@ -4,7 +4,12 @@ A little game about solving mazes to teach me the basics of game development, do
 ## Used Assets
 
 - Space Robot Kyle by Kyle Brewer
-- Yughues Free Metal Materials - patterns 10 & 23
+- Yughues Free Metal Materials - patterns 08 & 23
+- Locker by VIS Games
+- Snack Machines by VIS Games
+- CGY ATM
+- Bleep Blop Free SFX Pack
+
 
 Thanks a lot!
 
